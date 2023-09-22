@@ -6,7 +6,7 @@ async function delay(time) {
     setTimeout(resolve, time);
   });
 }
-
+// melissacoopermk73@gmail.com:Jii84gfcWR32
 (async () => {
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({ headless: false }); // Launch a headless browser
@@ -17,13 +17,13 @@ async function delay(time) {
 
   // Log in to Gmail
   await page.waitForSelector('input[type="email"]');
-  await page.type('input[type="email"]', 'itsmarin2@gmail.com');
+  await page.type('input[type="email"]', 'melissacoopermk73@gmail.com');
   await delay(1000);
   await page.waitForSelector('div[id="identifierNext"]');
   await page.click('div[id="identifierNext"]');
   await delay(3000);
   await page.waitForSelector('input[type="password"].whsOnd.zHQkBf[jsname="YPqjbf"][name="Passwd"]');
-  await page.type('input[type="password"].whsOnd.zHQkBf[jsname="YPqjbf"][name="Passwd"]', 'Menkshi123');
+  await page.type('input[type="password"].whsOnd.zHQkBf[jsname="YPqjbf"][name="Passwd"]', 'Jii84gfcWR32');
   await delay(1000);
   await page.waitForSelector('div[id="passwordNext"]');
   await page.click('div[id="passwordNext"]');
@@ -46,12 +46,9 @@ async function delay(time) {
   for (const email of emails) {
     // Check if the email contains the phrase "has been responded to"
     if (email.includes('has been responded to.')) {
-        console.log(email)
       console.log('Tinder has replied');
     }
-    else{
-        
-    }
+    
   }
 
   await browser.close();

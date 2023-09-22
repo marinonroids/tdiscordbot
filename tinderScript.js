@@ -39,8 +39,9 @@ async function handleTinderCommand(email) {
     await delay(1500)
     await page.type(`#${inputSecondFieldId}`, descriptionText);
     await page.waitForSelector('input[type="submit"].tinder-btn', { visible: true });
-    await page.click('input[type="submit"].tinder-btn');
     await delay(1500)
+    await page.click('input[type="submit"].tinder-btn');
+    await delay(4500)
     await browser.close();
     
     console.log("Closed!")
