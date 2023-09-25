@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { handleRefundCommand } = require('./refundScript');
 const { handleTinderCommand } = require('./tinderScript'); // Import the handleTinderCommand function from the script file
+const { getPasswordByEmail } = require('./emailSystem');
 
 
 const { Client, GatewayIntentBits, EmbedBuilder, Embed } = require('discord.js');
@@ -28,10 +29,17 @@ client.on('messageCreate', (message) => {
 
         message.reply({ embeds: [embed] });
     }
+
+
+
+
+
     else if (message.content.startsWith('!sb ')) {
         const email = message.content.slice('!sb '.length).trim();
         handleTinderCommand(email);
-        const embed = new EmbedBuilder()
+
+        client.on('tinderSuccess', (email) => {
+            const embed = new EmbedBuilder()
             .setColor(0x0099FF) // You can use any color code or name
             .setTitle('Tinder Bot Commands')
             .addFields(
@@ -39,12 +47,20 @@ client.on('messageCreate', (message) => {
             )
             .setFooter({ text: 'Tinder Ticket Bot - Powered by MM'})
             .setTimestamp();
-
-        message.reply({ embeds: [embed] });
+            message.reply({ embeds: [embed] });
+        });
+        
+        
+        
     }
+
+
+
+
+
     else if (message.content.startsWith('!refund ')){
-        const email = message.content.split(' ')[1]
-        const orderID = message.content.split(' ')[2]
+        const email = message.content.split(' ')[1];
+        const orderID = message.content.split(' ')[2];
         console.log(email)
         console.log(orderID)
         handleRefundCommand(email,orderID);
@@ -59,7 +75,32 @@ client.on('messageCreate', (message) => {
 
         message.reply({ embeds: [embed] });
     }
+
+
+
+    else if(message.content.startsWith('!pass ')){
+        const email = message.content.split(' ')[1];
+        getPasswordByEmail(email)
+            .then((password) => {
+                if (password !== null) {
+                const embed = new EmbedBuilder()
+                .setColor(0x0099FF) // You can use any color code or name
+                .setTitle('Tinder Bot Commands')
+                .addFields(
+                    {name:'Email:', value: `   ${email}`},
+                    {name:'Password:', value: `   ${password}`}
+                )
+                .setFooter({ text: 'Tinder Ticket Bot - Powered by MM'})
+                .setTimestamp();
+                message.reply({ embeds: [embed] });
+                } else {
+                console.log(`Email ${email} not found`);
+                }
+            })
+            .catch(console.error);
+        }
     
 });
 
 client.login(process.env.DISCORD_BOT_ID);
+module.exports = { client };

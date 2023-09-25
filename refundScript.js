@@ -10,7 +10,7 @@ async function delay(time) {
 
 async function getRandomThirdInput() {
     try {
-        const ThirdInputFileContents = await fs.readFile('refunddescriptions.txt', 'utf8');
+        const ThirdInputFileContents = await fs.readFile('docs/refunddescriptions.txt', 'utf8');
         const lines = ThirdInputFileContents.split('\n');
         const randomIndex = Math.floor(Math.random() * lines.length);
         return lines[randomIndex];
