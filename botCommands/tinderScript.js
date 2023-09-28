@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer-extra');
 const fs = require('fs').promises;
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const EventEmitter = require('events');
+
 
 
 
@@ -37,6 +39,8 @@ async function getRandomSecondInput() {
     }
 }
 
+const eventEmitter = new EventEmitter(); 
+
 async function getRandomProxy() {
     const randomIndex = Math.floor(Math.random() * proxies.length);
     const [proxy, username, password] = proxies[randomIndex].split(';');
@@ -44,7 +48,6 @@ async function getRandomProxy() {
 }
 
 async function handleTinderCommand(email) {
-    const { client } = require('/Users/marin/Documents/GitHub/tdiscordbot/bot');
     const { proxy, username, password } = await getRandomProxy();
     const descriptionText = await getRandomSecondInput();
     puppeteer.use(StealthPlugin());
@@ -69,18 +72,20 @@ async function handleTinderCommand(email) {
     await page.type(`#${inputSecondFieldId}`, descriptionText);
     await page.waitForSelector('input[type="submit"].tinder-btn', { visible: true });
     await delay(1500)
-    await page.click('input[type="submit"].tinder-btn');
-    await delay(1000)
+    await page.click('input[type="submit"].tinder-btn', {waitUntil : 'load'});
+    await delay(3000)
     const CurrentURL = page.url();
     console.log(CurrentURL)
-    if (CurrentURL === 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {
+    if (CurrentURL == 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {
         console.log('Success!');
-        client.emit('tinderSuccess', email);
         await browser.close();
+        eventEmitter.emit('tinderSuccess', email);
+        
         } else {
-        await browser.close();
-        console.log('Failed!');
-    }
+            await browser.close();
+            console.log('Failed!');
+            eventEmitter.emit('tinderFailed', email);
+        }
 }
 
-module.exports = { handleTinderCommand };
+module.exports = { handleTinderCommand, eventEmitter };

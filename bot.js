@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { handleRefundCommand } = require('./botCommands/refundScript');
-const { handleTinderCommand } = require('./botCommands/tinderScript'); 
+const { handleTinderCommand, eventEmitter } = require('./botCommands/tinderScript');
 const { getPasswordByEmail } = require('./botCommands/emailSystem');
 
 
@@ -36,30 +36,22 @@ client.on('messageCreate', (message) => {
 
     else if (message.content.startsWith('!sb ')) {
         const email = message.content.slice('!sb '.length).trim();
-        handleTinderCommand(email);
-        
-        client.on('tinderSuccess', (email) => {
+        handleTinderCommand(email)
+    
+        eventEmitter.on('tinderSuccess', email => {
             const embed = new EmbedBuilder()
-            .setColor(0x0099FF) // You can use any color code or name
-            .setTitle('Tinder Bot Commands')
-            .addFields(
-                {name:'Successfully Submitted a Ticket!', value: `You just submitted a shadowban lift ticket for ${email}.`},
-            )
-            .setFooter({ text: 'Tinder Ticket Bot '})
-            .setTimestamp();
-            client.off()
+                .setColor(0x0099FF)
+                .setTitle('Tinder Bot Commands')
+                .addFields(
+                    { name: 'Successfully Submitted a Ticket!', value: `You just submitted a shadowban lift ticket for ${email}.` }
+                )
+                .setFooter({ text: 'Tinder Ticket Bot ' })
+                .setTimestamp();
+                console.log("here once")
+            message.reply({ embeds: [embed] })
             
-
-        message.reply({ embeds: [embed] });
-        });
-        
-        
-        
-    }
-
-
-
-
+    });
+}
 
     else if (message.content.startsWith('!refund ')){
         const email = message.content.split(' ')[1];
