@@ -37,7 +37,7 @@ client.on('messageCreate', (message) => {
     else if (message.content.startsWith('!sb ')) {
         const email = message.content.slice('!sb '.length).trim();
         handleTinderCommand(email);
-
+        
         client.on('tinderSuccess', (email) => {
             const embed = new EmbedBuilder()
             .setColor(0x0099FF) // You can use any color code or name
@@ -47,7 +47,10 @@ client.on('messageCreate', (message) => {
             )
             .setFooter({ text: 'Tinder Ticket Bot '})
             .setTimestamp();
-            message.reply({ embeds: [embed] });
+            client.off()
+            
+
+        message.reply({ embeds: [embed] });
         });
         
         

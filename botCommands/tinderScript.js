@@ -70,15 +70,14 @@ async function handleTinderCommand(email) {
     await page.waitForSelector('input[type="submit"].tinder-btn', { visible: true });
     await delay(1500)
     await page.click('input[type="submit"].tinder-btn');
-    await delay(500)
+    await delay(1000)
     const CurrentURL = page.url();
     console.log(CurrentURL)
     if (CurrentURL === 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {
         console.log('Success!');
         client.emit('tinderSuccess', email);
         await browser.close();
-        
-    } else {
+        } else {
         await browser.close();
         console.log('Failed!');
     }
