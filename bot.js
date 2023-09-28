@@ -26,6 +26,7 @@ client.on('messageCreate', (message) => {
             )
             .setFooter({ text: 'Tinder Ticket Bot '})
             .setTimestamp();
+            
 
         message.reply({ embeds: [embed] });
     }
