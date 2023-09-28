@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer-extra');
 const fs = require('fs').promises;
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const {EmbedBuilder} = require('discord.js')
 
 async function delay(time) {
     return new Promise(function(resolve) {
@@ -40,7 +41,7 @@ async function getRandomProxy() {
     return { proxy, username, password };
 }
 
-async function handleRefundCommand(email, orderID) {
+async function handleRefundCommand(email, orderID, message) {
     const { client } = require('/Users/marin/Documents/GitHub/tdiscordbot/bot');
     const { proxy, username, password } = await getRandomProxy();
     const descriptionText = await getRandomThirdInput();
@@ -74,8 +75,17 @@ async function handleRefundCommand(email, orderID) {
     const CurrentURL = page.url();
     if (CurrentURL === 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {
         console.log('Success!');
-        client.emit('refundSuccess', email, orderID);
         await browser.close();
+        const embed = new EmbedBuilder()
+            .setColor(0x0099FF) // You can use any color code or name
+            .setTitle('Tinder Bot Commands')
+            .addFields(
+                {name:'Successfully Submitted a Refund Ticket!', value: `You just submitted a refund ticket for ${email} and Order ID : ${orderID}.`},
+            )
+            .setFooter({ text: 'Tinder Ticket Bot '})
+            .setTimestamp();
+        message.reply({ embeds: [embed] });
+        
         
     } else {
         await browser.close();

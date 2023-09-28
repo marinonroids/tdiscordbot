@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer-extra');
 const fs = require('fs').promises;
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const EventEmitter = require('events');
+const {EmbedBuilder} = require('discord.js')
+
 
 
 
@@ -39,7 +40,6 @@ async function getRandomSecondInput() {
     }
 }
 
-const eventEmitter = new EventEmitter(); 
 
 async function getRandomProxy() {
     const randomIndex = Math.floor(Math.random() * proxies.length);
@@ -47,7 +47,7 @@ async function getRandomProxy() {
     return { proxy, username, password };
 }
 
-async function handleTinderCommand(email) {
+async function handleTinderCommand(email, message) {
     const { proxy, username, password } = await getRandomProxy();
     const descriptionText = await getRandomSecondInput();
     puppeteer.use(StealthPlugin());
@@ -79,8 +79,17 @@ async function handleTinderCommand(email) {
     if (CurrentURL == 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {
         console.log('Success!');
         await browser.close();
-        eventEmitter.emit('tinderSuccess', email);
-        
+        const embed = new EmbedBuilder()
+        .setColor(0x0099FF)
+        .setTitle('Tinder Bot Commands')
+        .addFields(
+            { name: 'Successfully Submitted a Ticket!', value: `You just submitted a shadowban lift ticket for ${email}.` }
+        )
+        .setFooter({ text: 'Tinder Ticket Bot ' })
+        .setTimestamp();
+    message.reply({ embeds: [embed] })
+    
+    
         } else {
             await browser.close();
             console.log('Failed!');
@@ -88,4 +97,4 @@ async function handleTinderCommand(email) {
         }
 }
 
-module.exports = { handleTinderCommand, eventEmitter };
+module.exports = { handleTinderCommand };

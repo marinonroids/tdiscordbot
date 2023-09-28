@@ -26,9 +26,9 @@ client.on('messageCreate', (message) => {
             )
             .setFooter({ text: 'Tinder Ticket Bot '})
             .setTimestamp();
-            
 
-        message.reply({ embeds: [embed] });
+
+            message.reply({ embeds: [embed] });
     }
 
 
@@ -37,21 +37,9 @@ client.on('messageCreate', (message) => {
 
     else if (message.content.startsWith('!sb ')) {
         const email = message.content.slice('!sb '.length).trim();
-        handleTinderCommand(email)
+        handleTinderCommand(email, message)
     
-        eventEmitter.on('tinderSuccess', email => {
-            const embed = new EmbedBuilder()
-                .setColor(0x0099FF)
-                .setTitle('Tinder Bot Commands')
-                .addFields(
-                    { name: 'Successfully Submitted a Ticket!', value: `You just submitted a shadowban lift ticket for ${email}.` }
-                )
-                .setFooter({ text: 'Tinder Ticket Bot ' })
-                .setTimestamp();
-                console.log("here once")
-            message.reply({ embeds: [embed] })
-            
-    });
+     
 }
 
     else if (message.content.startsWith('!refund ')){
@@ -59,22 +47,7 @@ client.on('messageCreate', (message) => {
         const orderID = message.content.split(' ')[2];
         console.log(email)
         console.log(orderID)
-        handleRefundCommand(email,orderID);
-
-        client.on('refundSuccess', (email) => {
-            const embed = new EmbedBuilder()
-            .setColor(0x0099FF) // You can use any color code or name
-            .setTitle('Tinder Bot Commands')
-            .addFields(
-                {name:'Successfully Submitted a Refund Ticket!', value: `You just submitted a refund ticket for ${email} and Order ID : ${orderID}.`},
-            )
-            .setFooter({ text: 'Tinder Ticket Bot '})
-            .setTimestamp();
-            message.reply({ embeds: [embed] });
-        });
-        
-        
-            
+        handleRefundCommand(email,orderID,message);
         
     }
 
