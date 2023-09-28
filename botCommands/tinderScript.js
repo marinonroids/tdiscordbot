@@ -27,7 +27,7 @@ const proxies = [
 
 async function getRandomSecondInput() {
     try {
-        const secondInputFileContents = await fs.readFile('docs/shadowbandescriptions.txt', 'utf8');
+        const secondInputFileContents = await fs.readFile('/Users/marin/Documents/GitHub/tdiscordbot/docs/shadowbandescriptions.txt', 'utf8');
         const lines = secondInputFileContents.split('\n');
         const randomIndex = Math.floor(Math.random() * lines.length);
         return lines[randomIndex];
@@ -44,7 +44,7 @@ async function getRandomProxy() {
 }
 
 async function handleTinderCommand(email) {
-    const { client } = require('./bot');
+    const { client } = require('/Users/marin/Documents/GitHub/tdiscordbot/bot');
     const { proxy, username, password } = await getRandomProxy();
     const descriptionText = await getRandomSecondInput();
     puppeteer.use(StealthPlugin());
@@ -52,13 +52,13 @@ async function handleTinderCommand(email) {
         args: [`--proxy-server=${proxy}`],
         headless: false });
     const page = await browser.newPage();
-    await delay(2000)
+    await delay(1000)
     await page.authenticate({ username, password });
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'); // Your user agent here
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto('https://www.help.tinder.com/hc/en-us/requests/new?ticket_form_id=360000234392', { waitUntil: 'load' });
     await page.waitForSelector('input#request_custom_fields_360013897951[aria-required="true"]', { visible: true });
-    await delay(4000)
+    await delay(1000)
     await page.type('input#request_custom_fields_360013897951[aria-required="true"]', email);
     await page.waitForSelector('a.nesty-input[aria-labelledby="request_custom_fields_360014014151_label"]'); // Which feature is this about?
     await page.click('a.nesty-input[aria-labelledby="request_custom_fields_360014014151_label"]');
@@ -70,7 +70,7 @@ async function handleTinderCommand(email) {
     await page.waitForSelector('input[type="submit"].tinder-btn', { visible: true });
     await delay(1500)
     await page.click('input[type="submit"].tinder-btn');
-    await delay(2500)
+    await delay(500)
     const CurrentURL = page.url();
     console.log(CurrentURL)
     if (CurrentURL === 'https://www.help.tinder.com/hc/en-us?return_to=%2Fhc%2Frequests') {

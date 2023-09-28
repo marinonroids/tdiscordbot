@@ -13,10 +13,10 @@ const client = new MongoClient(uri,  {
 
 
 async function getPasswordByEmail(email) {
-await client.connect();
-const db = client.db("emails");
-const collection = db.collection("emailsystem");
-const user = await collection.findOne({ email });
+    await client.connect();
+    const db = client.db("emails");
+    const collection = db.collection("emailsystem");
+    const user = await collection.findOne({ email });
 if (user) {
     return user.password;
 } else {

@@ -2,7 +2,7 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 
 // Define the paths to your input .txt file and the output JSON file
-const txtFilePath = 'docs/input.txt'; // Replace with the path to your .txt file
+const txtFilePath = 'emails/combined_emails.txt'; // Replace with the path to your .txt file
 
 // MongoDB connection URI
 const mongoUri = 'mongodb+srv://marin:marin@emailsystem.eugp1f1.mongodb.net/?retryWrites=true&w=majority';
